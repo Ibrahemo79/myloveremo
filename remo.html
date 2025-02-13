@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Button Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #FFB6C1;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #FF69B4;
+            font-size: clamp(16px, 4vw, 24px);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px #FFFFFF;
+            line-height: 1.4;
+        }
+
+        /* Reset button styles */
+        button {
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            font: inherit;
+            line-height: normal;
+        }
+
+        /* Common button styles */
+        .button {
+            box-sizing: border-box;
+            width: 100px;
+            height: 50px;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            border: 3px solid #FF69B4;
+            background: #FFFFFF;
+            color: #FF69B4;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button:hover {
+            background: #FFE6EA;
+            transform: scale(1.05);
+        }
+
+        /* Fixed positions for both buttons */
+        #yesButton {
+            position: fixed;
+            left: 50%;
+            transform: translateX(calc(-100% - 10px)); /* Move left by button width + half gap */
+        }
+
+        #noButton {
+            position: fixed;
+            left: 50%;
+            transform: translateX(10px); /* Move right by half gap */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 id="mainText">Will you be my Valentine?</h1>
+    <button onclick="window.location.href='ssy.html'" id="yesButton" class="button">YES!</button>
+    <button id="noButton" class="button">NO!</button>
+</div>
+
+<script>
+    const noButton = document.getElementById('noButton');
+    const mainText = document.getElementById('mainText');
+    const yesButton = document.getElementById('yesButton');
+
+    // Get the initial vertical position of the buttons
+    const initialY = yesButton.getBoundingClientRect().top;
+
+    // Set initial vertical position for both buttons
+    yesButton.style.top = `${initialY}px`;
+    noButton.style.top = `${initialY}px`;
+
+    let isFirstHover = true;
+    let speed = 5;
+    let difficulty = 1;
+
+    const messages = [
+        "Will you be my Valentine?",
+        "baby...",
+        "REMO...😔",
+        "Come on... please say YES! 😥",
+        "🤨 HEY!!! REME!!",
+        "we are not going anywhere until you say YES!🤨",
+        "Do you love me😔??????????????"
+    ];
+
+    function getRandomPosition() {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const buttonRect = noButton.getBoundingClientRect();
+
+        const safeMargin = 20;
+        const maxX = windowWidth - buttonRect.width - safeMargin;
+        const maxY = windowHeight - buttonRect.height - safeMargin;
+
+        let x = Math.min(Math.max(safeMargin, Math.random() * maxX), maxX);
+        let y = Math.min(Math.max(safeMargin, Math.random() * maxY), maxY);
+
+        return { x, y };
+    }
+
+    function moveButton() {
+        if (isFirstHover) {
+            isFirstHover = false;
+
+            setTimeout(() => {
+                speed = 1;
+                difficulty = 1.5;
+                mainText.textContent = messages[2];
+                noButton.style.transition = `all ${speed}s ease-out`;
+            }, 2000);
+
+            setTimeout(() => {
+                speed = 0.1;
+                difficulty = 3;
+                mainText.textContent = messages[3];
+                noButton.style.transition = `all ${speed}s ease-out`;
+            }, 5000);
+
+            setTimeout(() => {
+                speed = 0.01;
+                difficulty = 3;
+                mainText.textContent = messages[4];
+                noButton.style.transition = `all ${speed}s ease-out`;
+            }, 7500);
+
+            setTimeout(() => {
+                speed = 0.01;
+                difficulty = 3;
+                mainText.textContent = messages[5];
+                noButton.style.transition = `all ${speed}s ease-out`;
+            }, 10000);
+
+            setTimeout(() => {
+                speed = 0.01;
+                difficulty = 3;
+                mainText.textContent = messages[6];
+                noButton.style.transition = `all ${speed}s ease-out`;
+            }, 12000);
+        }
+
+        const { x, y } = getRandomPosition();
+        noButton.style.transform = 'none'; // Remove the initial transform
+        noButton.style.left = `${x}px`;
+        noButton.style.top = `${y}px`;
+    }
+
+    noButton.addEventListener('mouseover', moveButton);
+    noButton.addEventListener('click', moveButton);
+    noButton.addEventListener('touchstart', moveButton, { passive: true });
+
+    // Recalculate positions on window resize
+    window.addEventListener('resize', () => {
+        const newY = window.innerHeight / 2;
+        yesButton.style.top = `${newY}px`;
+        if (!isFirstHover) {
+            moveButton();
+        } else {
+            noButton.style.top = `${newY}px`;
+        }
+    });
+</script>
+</body>
+</html>
